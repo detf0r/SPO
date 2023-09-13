@@ -1,3 +1,3 @@
 #!/bin/bash
-echo journalctl | grep -P 'kernel.*USB.[23]'
+echo $(journalctl | grep -P 'kernel.*USB.[23]')
 
