@@ -5,7 +5,7 @@
 using namespace std;
 
 void printMenu(){
-    cout << "Введите цифру:\n"
+    cout << "\nВведите цифру:\n"
          << "1. Выполнить введенную команду\n"
          << "2. Запустить на исполнение файл со сценарием\n"
          << "3. Сделать все файлы указанной директории исполняемыми\n"
@@ -26,7 +26,7 @@ void shellComandExec(){
 
 void scriptFileExec(){
     system("clear");
-    cout << "Вы выбрали:\n1. Запустить на исполнение файл со сценарием\n\n"
+    cout << "Вы выбрали:\n2. Запустить на исполнение файл со сценарием\n\n"
          << "Введите путь файла и параметры через пробел:\n";
     
     int st = 0;
@@ -55,12 +55,11 @@ void makeDirectoryFilesUsable(){
     wait(&st);
 }
 
-int main()
-{
+int main() {
     setlocale(LC_ALL,"russian");
 
     while(true){
-        system("clear");
+        
         printMenu();
 
         int choice = 0;
@@ -78,7 +77,7 @@ int main()
             makeDirectoryFilesUsable();
             break;
         case 4:
-            cout << "Выход...";
+            cout << "Выход...\n";
             exit(0);
             break;
         default:
