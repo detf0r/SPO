@@ -17,7 +17,7 @@ void shellComandExec(){
     int st = 0;
     if (fork() == 0){
         char input[100];
-        cin.getline(input,sizeof(input));
+        cin.getline(input,sizeof(input),'\n');
         system(input);
         exit(0);
     }
