@@ -24,6 +24,22 @@ void shellComandExec(){
     wait(&st);
 }
 
+void scriptFileExec(){
+    system("clear");
+    cout << "Вы выбрали:\n1. Запустить на исполнение файл со сценарием\n\n"
+         << "Введите путь файла и параметры через пробел:\n";
+    
+    int st = 0;
+    if (fork()==0){
+        char input[150];
+
+        cin.getline(input,sizeof(input));
+        system(input);
+        exit(0);
+    }
+    wait(&st);
+}
+
 int main()
 {
     setlocale(LC_ALL,"russian");
@@ -41,6 +57,7 @@ int main()
             shellComandExec();
             break;
         case 2:
+            scriptFileExec();
             break;
         case 3:
             break;
