@@ -35,7 +35,8 @@ void scriptFileExec(){
     int st = 0;
     if (fork()==0){
         char input[150];
-
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
         cin.getline(input,sizeof(input));
         system(input);
         exit(0);
@@ -51,8 +52,13 @@ void makeDirectoryFilesUsable(){
 
     if (fork() == 0){
         char path [200];
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
         cin.getline(path,sizeof(path));
-        system("chmod +x path/*");
+        string command = "chmod +x ";
+        command += path;
+        command += "/*";
+        system(command.c_str());
         exit(0);
     }
     wait(&st);
