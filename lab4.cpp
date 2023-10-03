@@ -14,6 +14,7 @@ void printMenu(){
 }
 void shellComandExec(){
     system("clear");
+    
     cout << "Вы выбрали:\n1. Выполнить введенную команду\n\nВведите команду:\n";
     int st = 0;
     if (fork() == 0){
@@ -29,6 +30,7 @@ void shellComandExec(){
 
 void scriptFileExec(){
     system("clear");
+    
     cout << "Вы выбрали:\n2. Запустить на исполнение файл со сценарием\n\n"
          << "Введите путь файла и параметры через пробел:\n";
     
@@ -46,19 +48,34 @@ void scriptFileExec(){
 
 void makeDirectoryFilesUsable(){
     system("clear");
+    
     cout << "Вы выбрали:\n3. Сделать все файлы указанной директории исполняемыми\n\n"
-         << "Введите путь до директории:\n";
+         << "Введите путь до директории в одинарных кавычках:\n";
     int st = 0;
 
     if (fork() == 0){
-        char path [200];
+        char input [200];
+
         cin.clear();
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        cin.getline(path,sizeof(path));
+        cin.getline(input,sizeof(input));
+
+        string strPath(input);
+        size_t startPos = strPath.find_first_of("'")+1;
+        size_t endPos = strPath.find_last_of("'");
+
         string command = "chmod +x ";
+        string path = strPath.substr(startPos,endPos - startPos) + "/*";
         command += path;
-        command += "/*";
-        system(command.c_str());
+
+
+        cout << "Все файлы по пути: "<< path << " будут изменены\nПродолжить? (y/n): ";
+        char answer;
+        cin >> answer;
+        if (answer == 'y'){
+            system(command.c_str());
+        }
+        
         exit(0);
     }
     wait(&st);
