@@ -1,6 +1,7 @@
 #include <unistd.h>
 #include <iostream>
 #include <sys/wait.h>
+#include <limits>
 
 using namespace std;
 
@@ -17,7 +18,9 @@ void shellComandExec(){
     int st = 0;
     if (fork() == 0){
         char input[100];
-        cin.getline(input,sizeof(input),'\n');
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cin.getline(input,sizeof(input));
         system(input);
         exit(0);
     }
