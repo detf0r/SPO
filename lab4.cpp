@@ -40,6 +40,21 @@ void scriptFileExec(){
     wait(&st);
 }
 
+void makeDirectoryFilesUsable(){
+    system("clear");
+    cout << "Вы выбрали:\n3. Сделать все файлы указанной директории исполняемыми\n\n"
+         << "Введите путь до директории:\n";
+    int st = 0;
+
+    if (fork() == 0){
+        char path [200];
+        cin.getline(path,sizeof(path));
+        system("chmod +x path/*");
+        exit(0);
+    }
+    wait(&st);
+}
+
 int main()
 {
     setlocale(LC_ALL,"russian");
@@ -60,8 +75,10 @@ int main()
             scriptFileExec();
             break;
         case 3:
+            makeDirectoryFilesUsable();
             break;
         case 4:
+            cout << "Выход...";
             exit(0);
             break;
         default:
