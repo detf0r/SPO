@@ -46,12 +46,12 @@ int * find_nums_between_minmax(vector<int> &sortedArray, pair <int,int> minMax){
     semop(semid,&Plus1,1);
     int *k = (int*)shmat(shmid,NULL,0);
     int * arr = (int*)shmat(shmid1,NULL,0);
-    //arr=arrMem;
 
-    int intervalForProc = sortedArray.size() / NumOfProc;
+
+    int intervalForProc = sortedArray.size() / (NumOfProc-1);
     *k = 2;
 
-    for (int proc = 0; proc < NumOfProc; proc++){
+    for (int proc = 0; proc < NumOfProc-1; proc++){
         if (fork()==0){
             for (int i = proc*intervalForProc; (i < proc*intervalForProc+intervalForProc) && (i < sortedArray.size()-1) && (sortedArray[i] < minMax.second); i++){
                 
@@ -67,13 +67,25 @@ int * find_nums_between_minmax(vector<int> &sortedArray, pair <int,int> minMax){
             exit(0);
         }
     }
-    cout << endl;
-    arr[0] = shmid1;
-    arr[1] = *k - 2;
+    for (int i = (NumOfProc-1)*intervalForProc; (i < sortedArray.size()-1) && (sortedArray[i] < minMax.second); i++){
+                
+                for (int j = sortedArray[i]+1; (j < sortedArray[i+1]) && (j < minMax.second); j++){
+                    semop(semid,&Minus1,1);
+
+                    arr[*k] = j;
+                    *k = *k+1;
+                    
+                    semop(semid,&Plus1,1);
+                }    
+    }
+    
+
     string temp = "ipcs -s -i " + to_string(semid);
     system(temp.c_str());
     wait(NULL);
-    
+
+    arr[0] = shmid1;
+    arr[1] = *k - 2;
 
     semctl(semid, 0, IPC_RMID);
 
@@ -111,6 +123,7 @@ int main(){
     pair<int,int> minMax(array[0],array[array.size()-1]);
     int * numsBtwMinMax = find_nums_between_minmax(array,minMax);
     if (numsBtwMinMax != nullptr){
+        sort(numsBtwMinMax+2,numsBtwMinMax+numsBtwMinMax[1]+2);
         print_array(numsBtwMinMax+2,numsBtwMinMax[1]);
     }
     
